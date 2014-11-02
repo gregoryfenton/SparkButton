@@ -26,12 +26,13 @@ void Button::begin(){
 
 void Button::ledOn(uint8_t i, uint8_t r, uint8_t g, uint8_t b){
     //i-1 shifts the location from human readable to the right index for the LEDs
-    if(i == 12){
-        ring.setPixelColor(0, ring.Color(r,g,b));
-        ring.setPixelColor(10, ring.Color(r,g,b));
+    if(i == 0 && RGB.controlled()){
+        RGB.color(r,g,b);
     }
     else{
-        ring.setPixelColor(i-1, ring.Color(r,g,b));
+        if(i > 0 && i <= PIXEL_COUNT){
+            ring.setPixelColor(i-1, ring.Color(r,g,b));
+        }
     }
     ring.show();
 }
@@ -40,12 +41,18 @@ void Button::allLedsOff(){
     for(int i = 0; i<PIXEL_COUNT; i++){
             ring.setPixelColor(i, ring.Color(0, 0, 0));
     }
+    if(RGB.controlled()){
+        RGB.color(0,0,0);
+    }
     ring.show();
 }
 
 void Button::allLedsOn(uint8_t r, uint8_t g, uint8_t b){
     for(int i = 0; i<PIXEL_COUNT; i++){
             ring.setPixelColor(i, ring.Color(r, g, b));
+    }
+    if(RGB.controlled()){
+        RGB.color(r,g,b);
     }
     ring.show();
 }
